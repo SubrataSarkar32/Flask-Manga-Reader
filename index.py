@@ -1,4 +1,4 @@
-from flask import Flask, render_template, abort
+from flask import Flask, render_template, abort, redirect
 import os.path
 app = Flask(__name__,
     static_url_path='',
@@ -15,6 +15,22 @@ def home():
                     chapters.append((file, directory.replace('#', '%23') + '/' + filename, file.replace('#', '%23')))
                     break
     return render_template('home.html', chps = chapters)
+
+@app.route('/search/')
+def searchNone():
+    return redirect('/')
+
+@app.route('/search/<query>')
+def search(query):
+    chapters = []
+    for file in os.listdir('.'):
+        directory = './' + file
+        if os.path.isdir(directory) and query in file:
+            for filename in os.listdir(directory):
+                if filename.endswith(".png") or filename.endswith(".jpg"):
+                    chapters.append((file, '.' + directory.replace('#', '%23') + '/' + filename, file.replace('#', '%23')))
+                    break
+    return render_template('search.html', chps = chapters, qry = query)
 
 @app.route('/<chapter_name>')
 def read(chapter_name):

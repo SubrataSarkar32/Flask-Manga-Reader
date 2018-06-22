@@ -33,19 +33,19 @@
         </style>
         <script>
             function search () {
-                window.location.href = './search/' + document.getElementById('search').value;
+                window.location.href = '../search/' + document.getElementById('search').value;
             }
         </script>
     </head>
     <title>Manga Directory</title>
     <div>
-        <input type ='text' id = 'search' oninput="updateQuery(this.value)" />
-        <img src = "./assets/icons/search.png" onclick="search()" />
+        <input type ='text' id = 'search' value = "{{ qry }}" oninput="updateQuery(this.value)" />
+        <img src = "../assets/icons/search.png" onclick="search()" />
     </div>
     <ul style = "list-style: none;" margin = "0 auto;">
     {% for chp in chps %}
         <li>
-            <a href = "./{{ chp[2] }}"><img src = "{{ chp[1] }}" alt="tst" width = "300"/></a>
+            <a href = "../{{ chp[2] }}"><img src = "{{ chp[1] }}" alt="tst" width = "300"/></a>
             <p> {{ chp[0] }} </p>
         </li>
     {% endfor %}
