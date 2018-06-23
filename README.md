@@ -1,14 +1,14 @@
-#Browser Manga Reader
+# Flask Manga Reader
 
-A Flask application that lets you navigate and read downloaded manga using your browser.
+A Python Flask application that lets you navigate and read downloaded manga using your browser.
 ![Alt text](assets/example.png?raw=true)
 
 ### Prerequisites
 
 ```
-#Install Python 3
+# Install Python 3
 brew install python
-#Install Flask
+# Install Flask
 pip install Flask
 ```
 
