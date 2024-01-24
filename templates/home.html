@@ -43,13 +43,19 @@
     <title>Manga Directory</title>
     <div>
         <input type ='text' id = 'search' oninput="updateQuery(this.value)" />
-        <img src = "./assets/icons/search.png" onclick="search()" />
+        <img src = "{{ "./assets/icons/Search.png" }}" onclick="search()" />
     </div>
     <ul style = "list-style: none;" margin = "0 auto;">
     {% for chp in chps %}
         <li>
             <a href = "./{{ chp[2] }}"><img src = "{{ chp[1] }}" alt="tst" width = "300"/></a>
             <p> {{ chp[0] }} </p>
+        </li>
+    {% endfor %}
+    {% for vid in vids %}
+        <li>
+            <a href = "./{{ vid[2] }}"><img src = "{{ vid[1] }}" alt="tst" width = "300"/></a>
+            <p> {{ vid[0] }} </p>
         </li>
     {% endfor %}
     </ul>
