@@ -1,6 +1,7 @@
 # Flask Manga Reader
 
 A Python Flask application that lets you navigate and read downloaded manga using your browser.
+You can also use this to view photos/videos sorted in folder
 
 ![Alt text](assets/example.png?raw=true)
 
@@ -15,7 +16,7 @@ pip install -r requirements.txt
 
 ### Instructions
 
-1. Move files from Flask-Manga-Reader into your manga directory
+1. Move files to Flask-Manga-Reader from your manga directory
 ```
 -| Flask-Manga-Reader
  |-- assets
