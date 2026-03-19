@@ -33,6 +33,31 @@
                 position: relative;
                 font-size: 16pt;
             }
+            .search-box {
+    display: flex;
+    align-items: center;
+    background: #2a2a2a;
+    border-radius: 6px;
+    padding: 5px 10px;
+    border: 1px solid #555;
+}
+
+.search-box input {
+    border: none;
+    outline: none;
+    background: transparent;
+    flex: 1;
+}
+.search-box img {
+    width: 50px;
+    height: 50px;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+}
+
+.search-box img:hover {
+    transform: scale(1.1);
+}
         </style>
         <script>
             function search () {
@@ -42,19 +67,24 @@
     </head>
     <title>Manga Directory</title>
     <div>
-        <input type ='text' id = 'search' value = "{{ qry }}" oninput="updateQuery(this.value)" />
-        <img src = "./assets/icons/search.png" onclick="search()" />
+        <div class="search-box">
+            <input type="text" id="search"
+       value="{{ qry }}"
+       oninput="updateQuery(this.value)"
+       onkeydown="if(event.key==='Enter') search()" />
+            <img src="/assets/icons/Search.png" onclick="search()" />
+        </div>
     </div>
     <ul style = "list-style: none;" margin = "0 auto;">
     {% for chp in chps %}
         <li>
-            <a href = "../{{ chp[2] }}"><img src = "{{ chp[1] }}" alt="tst" width = "300"/></a>
+            <a href = "{{ url_for('read_page', chapter_name=chp[2], page_index=0) }}"><img src = "/{{ chp[1] }}" alt="tst" width = "300"/></a>
             <p> {{ chp[0] }} </p>
         </li>
     {% endfor %}
     {% for vid in vids %}
         <li>
-            <a href = "../{{ chp[2] }}"><img src = "{{ chp[1] }}" alt="tst" width = "300"/></a>
+            <a href = "{{ url_for('read_page', chapter_name=chp[2], page_index=0) }}"><img src = "/{{ chp[1] }}" alt="tst" width = "300"/></a>
             <p> {{ vid[0] }} </p>
         </li>
     {% endfor %}

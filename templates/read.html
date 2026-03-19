@@ -3,28 +3,270 @@
     <head>
         <link rel="icon" href="data:,">
         <style>
+            @media (max-width: 768px) {
+
+.overlay-arrow {
+    font-size: 48px;
+    opacity: 0.7; /* always slightly visible on mobile */
+}
+
+.overlay-half-left:hover,
+.overlay-half-right:hover {
+    background: transparent;
+}
+
+}
+.overlay-half-left,
+.overlay-half-right {
+    position: absolute;
+    top: 0;
+    height: 100%;
+    width: 50%;
+    z-index: 10;
+    cursor: pointer;
+    text-decoration: none;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+/* subtle hover zone */
+.overlay-half-left:hover,
+.overlay-half-right:hover {
+    background: rgba(0,0,0,0.15);
+}
+.overlay-arrow {
+    font-size: 60px;
+    color: white;
+    opacity: 0;
+    transition: opacity 0.2s;
+    pointer-events: none;
+}
+
+.overlay-half-left:hover .overlay-arrow,
+.overlay-half-right:hover .overlay-arrow {
+    opacity: 1;
+}
+
+.overlay-half-left {
+    left: 0;
+}
+
+.overlay-half-right {
+    right: 0;
+}
+
+
+/* Optional: Add padding or margin around image container */
+.image-container {
+    position: relative;
+    margin: 20px auto;
+    max-width: 100%;
+    display: inline-block;
+}
+.image-container img,
+.image-container video {
+    display: block;
+    width: 100%;
+}
+.image-container img:hover {
+    transform: scale(1.02);
+}
+
+.image-container video:hover {
+    transform: scale(1.02);
+}
             img {
                 display: block;
                 margin-left: auto;
                 margin-right: auto;
                 margin-bottom: 15px;
+                max-width: 100%;
+                height: auto;
+            }
+            video {
+                display: block;
+                margin: 15px auto;
+                max-width: 100%;
+                height: auto;
+                border: 1px solid #333;
+                border-radius: 8px;
             }
             body {
-                background-color: #202020;
+                background-color: #1a1a1a;
+                color: #eee;
+                font-family: Arial, sans-serif;
+                line-height: 1.6;
+            }
+            .content-container {
+                max-width: 1200px;
+                margin: 0 auto;
+                padding: 20px;
+            }
+            .page-info {
+                margin: 20px auto;
+                text-align: center;
+                font-size: 18px;
+                font-weight: bold;
+                color: #00bfff;
+                padding: 10px;
+                background-color: #2a2a2a;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            }
+            .pagination {
+                margin: 30px auto;
+                text-align: center;
+                padding: 15px;
+                background-color: #2a2a2a;
+                border-radius: 8px;
+                box-shadow: 0 2px 5px rgba(0, 0, 0, 0.3);
+            }
+            .pagination a {
+                margin: 0 8px;
+                padding: 12px 16px;
+                text-decoration: none;
+                color: white;
+                background-color: #3a3a3a;
+                border: 1px solid #555;
+                border-radius: 6px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+            .pagination a:hover {
+                background-color: #555;
+            }
+            .pagination a.active {
+                background-color: #007bff;
+                color: white;
+                font-weight: bold;
+            }
+            .page-input {
+                margin: 0 10px;
+                padding: 10px;
+                width: 60px;
+                text-align: center;
+                border: 1px solid #555;
+                border-radius: 6px;
+                font-size: 16px;
+                background-color: #2a2a2a;
+                color: white;
+            }
+            .page-input:focus {
+                outline: none;
+                border-color: #007bff;
+                box-shadow: 0 0 5px rgba(0, 123, 255, 0.5);
+            }
+            .go-button {
+                padding: 12px 20px;
+                margin: 0 10px;
+                background-color: #007bff;
+                color: white;
+                border: none;
+                border-radius: 6px;
+                cursor: pointer;
+                font-size: 16px;
+                font-weight: bold;
+                transition: background-color 0.3s ease;
+            }
+            .go-button:hover {
+                background-color: #0056b3;
             }
         </style>
-    </head>
     <title>{{ txt }} : Read Chapter</title>
-    <ul style = "list-style: none;" margin = "0 auto;">
-    {% for img in imgs %}
-        <li><img src = "{{ img }}" alt="tst" width = "1000"/></li>
-    {% endfor %}
-    {% for vid in vids %}
-         <li>
-             <video width="800" controls autoplay>
-                 <source src="{{ vid }}" type="video/mp4">
-             </video> 
-        </li>
-    {% endfor %}
-    </ul>
+    </head>
+    <body>
+        <div class="content-container">
+            {% if show_all_images %}
+                <ul style="list-style: none; margin: 0 auto;">
+                    {% for img in imgs %}
+                        <li><img src="{{ img }}" alt="Chapter Image" /></li>
+                    {% endfor %}
+                    {% for vid in vids %}
+                        <li>
+                            <video width="800" controls>
+                                <source src="{{ vid }}" type="video/mp4">
+                                Your browser does not support the video tag.
+                            </video>
+                        </li>
+                    {% endfor %}
+                </ul>
+            <div class="pagination">
+                <a href="{{ url_for('home') }}" class="page-link">Home</a>
+            </div>
+            {% else %}
+                <!-- Only show one image for specific page -->
+                {% if imgs and page_index < total_pages %}
+                    <div class="image-container">
+                        <img src="/{{ selected_image }}" alt="Chapter Image" />
+                        <!-- Transparent half-overlay (left and right) with click links -->
+                         {% if page_index > 0 %}
+                            <a href="{{ url_for('read_page', chapter_name=txt, page_index=page_index - 1) }}" class="overlay-half-left" >
+                                <span class="overlay-arrow">❮</span>
+                            </a>
+                        {% endif %}
+                        {% if page_index < total_pages - 1 %}
+                            <a href="{{ url_for('read_page', chapter_name=txt, page_index=page_index + 1) }}" class="overlay-half-right" >
+                                <span class="overlay-arrow">❯</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                {% if vids and page_index < total_pages %}
+                    <div class="image-container">
+                        <video width="800" controls>
+                            <source src="/{{ vids[page_index] }}" type="video/mp4">
+                            Your browser does not support the video tag.
+                        </video>
+                        <!-- Transparent half-overlay (left and right) with click links -->
+                         {% if page_index > 0 %}
+                            <a href="{{ url_for('read_page', chapter_name=txt, page_index=page_index - 1) }}" class="overlay-half-left" >
+                                <span class="overlay-arrow">❮</span>
+                            </a>
+                        {% endif %}
+                        {% if page_index < total_pages - 1 %}
+                            <a href="{{ url_for('read_page', chapter_name=txt, page_index=page_index + 1) }}" class="overlay-half-right" >
+                                <span class="overlay-arrow">❯</span>
+                            </a>
+                        {% endif %}
+                    </div>
+                {% endif %}
+                <div class="page-info">
+                Page {{ page_index + 1 }} of {{ total_pages }}
+            </div>
+            <div class="pagination">
+                <a href="{{ url_for('read_page', chapter_name=txt, page_index=0) }}" class="page-link">First</a>
+                {% if page_index > 0 %}
+                    <a href="{{ url_for('read_page', chapter_name=txt, page_index=page_index - 1) }}" class="page-link">Previous</a>
+                {% endif %}
+                <a href="{{ url_for('read_page', chapter_name=txt, page_index=page_index) }}" class="active">Page {{ page_index + 1 }}</a>
+                {% if page_index < total_pages - 1 %}
+                    <a href="{{ url_for('read_page', chapter_name=txt, page_index=page_index + 1) }}" class="page-link">Next</a>
+                {% endif %}
+                <a href="{{ url_for('read_page', chapter_name=txt, page_index=total_pages - 1) }}" class="page-link">Last</a>
+                <a href="{{ url_for('read', chapter_name=txt, ) }}" class="page-link">View All</a>
+                <a href="{{ url_for('home') }}" class="page-link">Home</a>
+            </div>
+            <form action="{{ url_for('read_page', chapter_name=txt, page_index=page_index) }}" method="GET" style="text-align: center; margin: 20px 0;">
+                <input type="number" name="page" value="{{ page_index + 1 }}" class="page-input" min="1" max="{{ total_pages }}" required>
+                <button type="submit" class="go-button">Go</button>
+            </form>
+            {% endif %}
+        </div>
+    </body>
+    <script>
+document.addEventListener("keydown", function(e) {
+
+    if (e.key === "ArrowLeft") {
+        const prev = document.querySelector(".overlay-half-left");
+        if (prev) prev.click();
+    }
+
+    if (e.key === "ArrowRight") {
+        const next = document.querySelector(".overlay-half-right");
+        if (next) next.click();
+    }
+
+});
+</script>
 </html>
